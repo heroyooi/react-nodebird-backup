@@ -31,4 +31,4 @@ npm i antd styled-components @ant-design/icons
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 2-8 08:30
+## 듣던 강좌 3-1
