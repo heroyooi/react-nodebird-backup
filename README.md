@@ -46,4 +46,4 @@ npm i redux-devtools-extension
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 3-7
+## 듣던 강좌 3-9
