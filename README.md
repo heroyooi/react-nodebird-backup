@@ -42,8 +42,14 @@ npm i redux react-redux next-redux-wrapper
 npm i redux-devtools-extension
 ```
 
+### 3.10 이미지 캐루셀 구현하기 react-slick
+
+```command
+npm i react-slick
+```
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 3-9
+## 듣던 강좌 3-10 9분
