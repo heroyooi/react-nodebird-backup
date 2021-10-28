@@ -87,8 +87,21 @@ const loginAction = (data) => {
 
 - 함수를 리턴하는 비동기 action creator 예시
 
+### 4.2 saga 설치하고 generator 이해하기
+
+```command
+npm rm redux-thunk
+npm i redux-saga next-redux-saga
+```
+
+### 4.3 saga 이펙트 알아보기
+
+```command
+npm i axios
+```
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 4-2
+## 듣던 강좌 4-3 05:25
