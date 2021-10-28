@@ -48,8 +48,47 @@ npm i redux-devtools-extension
 npm i react-slick
 ```
 
+### 4.1 redux-thunk 이해하기
+
+```js
+function createThunkMiddleware(extraArgument) {
+  return ({ dispatch, getState }) =>
+    (next) =>
+    (action) => {
+      if (typeof action === "function") {
+        return action(dispatch, getState, extraArgument);
+      }
+
+      return next(action);
+    };
+}
+```
+
+```command
+npm i redux-thunk
+```
+
+```js
+const loginAction = (data) => {
+  return (dispatch, getState) => {
+    const state = getState(); // initialState
+    dispatch(loginRequestAction());
+    axios
+      .post("/api/login")
+      .then((res) => {
+        dispatch(loginSuccessAction(res.data));
+      })
+      .catch((err) => {
+        dispatch(loginFailureAction(err));
+      });
+  };
+};
+```
+
+- 함수를 리턴하는 비동기 action creator 예시
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 3-10 9분
+## 듣던 강좌 4-2
