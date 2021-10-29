@@ -101,6 +101,7 @@ npm i axios
 ```
 
 - 제네레이터를 사용하면 테스트를 할 때 매우 편리하다
+
 ```js
 function* logIn(action) {
   try {
@@ -117,7 +118,8 @@ function* logIn(action) {
   }
 }
 
-function* watchLogIn() { // 이벤트 리스너와 같은 역할
+function* watchLogIn() {
+  // 이벤트 리스너와 같은 역할
   yield takeLatest("LOG_IN_REQUEST", logIn);
 }
 
@@ -125,16 +127,24 @@ export default function* rootSaga() {
   yield all([fork(watchLogIn)]);
 }
 
-const l = logIn({ type: 'LOG_IN_REQUEST', data: { id: 'zerocho@gmail.com' } });
+const l = logIn({ type: "LOG_IN_REQUEST", data: { id: "zerocho@gmail.com" } });
 l.next(); // yield call(logInAPI, action.data);
 l.next(); // yield put({ type: LOG_IN_SUCCESS, ... })
 ```
+
 - takeLatest: 여러번 클릭했을 경우 마지막 것만 실행 (요청이 여러번 가는 것은 막을 수 없다.)
 - takeLeading: 여러번 클릭했을 경우 처음 것만 실행 (요청이 여러번 가는 것은 막을 수 없다.)
 - throttle: 제한 시간을 둬서 그 시간만큼 요청도 막을 수 있다. 그 시간 안에는 요청이 한번만 간다.
+
+### 4.7. 바뀐 상태 적용하고 eslint 점검하기
+
+```command
+npm i -D babel-eslint eslint-config-airbnb eslint-plugin-import eslint-plugin-react-hooks
+npm i -D eslint-plugin-jsx-a11y
+```
 
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 4-5
+## 듣던 강좌 4-8
