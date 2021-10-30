@@ -153,4 +153,4 @@ npm i shortid faker
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 4-9
+## 듣던 강좌 4-10
