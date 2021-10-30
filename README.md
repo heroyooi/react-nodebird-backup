@@ -146,11 +146,11 @@ npm i -D eslint-plugin-jsx-a11y
 ### 4.8. 게시글 댓글 saga 작성하기
 
 ```command
-
+npm i shortid faker
 ```
 
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 4-8 05:30
+## 듣던 강좌 4-9
