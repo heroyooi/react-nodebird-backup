@@ -165,4 +165,4 @@ npm i faker
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 4-13
+## 듣던 강좌 5-1
