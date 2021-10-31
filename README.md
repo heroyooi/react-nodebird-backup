@@ -146,7 +146,7 @@ npm i -D eslint-plugin-jsx-a11y
 ### 4.8. 게시글 댓글 saga 작성하기
 
 ```command
-npm i shortid faker
+npm i shortid
 ```
 
 ### 4.10. immer 도입하기
@@ -155,8 +155,14 @@ npm i shortid faker
 npm i immer
 ```
 
+### 4.11. faker로 실감나는 더미데이터 만들기
+
+```command
+npm i faker
+```
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 4-11
+## 듣던 강좌 4-13
