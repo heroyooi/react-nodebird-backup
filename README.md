@@ -21,10 +21,10 @@ npm i eslint eslint-plugin-import eslint-plugin-react eslint-plugin-react-hooks 
 npm i antd styled-components @ant-design/icons
 ```
 
-### 2.2 \_app.js와 Head
+### 2.2 _app.js와 Head
 
-- 공통되는 부분은 \_app.js 파일을 생성해서 연결해주면 된다.
-- \_app.js는 pages들의 공통 부분이다.
+- 공통되는 부분은 _app.js 파일을 생성해서 연결해주면 된다.
+- _app.js는 pages들의 공통 부분이다.
 - Head로 페이지별 메타 정보와 타이틀 정보를 바꿀 수 있다.
 
 ### 3.1 리덕스 설치와 필요성 소개
@@ -161,8 +161,31 @@ npm i immer
 npm i faker
 ```
 
+## Back-end
+
+### 5.2. 익스프레스로 라우팅하기
+
+```command
+npm init
+npm i express
+```
+
+- app.get => 가져오다
+- app.post => 생성하다
+- app.put => 전체 수정
+- app.delete => 제거
+- app.patch => 부분 수정
+- app.options => 찔러보기 (서버야, 나 요청 보내면 받아줄거야?)
+- app.head => 헤더만 가져오기 (헤더/바디)
+  - 원래는 헤더 바디 둘다 오는데, 헤더만 가져온다.
+
+- REST API를 그대로 지키기는 거의 불가능하다.
+- 애매하면 post를 사용한다.
+
+- [Swagger | API 문서 뽑는 프로그램](https://swagger.io)
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 5-1
+## 듣던 강좌 5-4
