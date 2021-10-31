@@ -149,8 +149,14 @@ npm i -D eslint-plugin-jsx-a11y
 npm i shortid faker
 ```
 
+### 4.10. immer 도입하기
+
+```command
+npm i immer
+```
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 4-10
+## 듣던 강좌 4-11
