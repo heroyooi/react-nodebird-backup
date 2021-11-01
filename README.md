@@ -184,8 +184,85 @@ npm i express
 
 - [Swagger | API 문서 뽑는 프로그램](https://swagger.io)
 
+### 5.4. MySQL과 시퀄라이즈 연결하기
+
+- [MySQL 다운로드](https://dev.mysql.com/downloads/installer)
+
+```command
+npm i sequelize sequelize-cli mysql2
+```
+
+```command
+npx sequelize init
+```
+
+- mysql에서는 테이블 = sequelize에서는 모델
+
+### 5.6. 시퀄라이즈 관계 설정하기
+
+#### 1대다 관계
+
+- 사용자가 게시글을 작성한다. 사용자 한명이 여러개의 게시글을 작성할 수 있다.
+- user와 post간의 1대다 관계
+
+```js
+User.associate = (db) => {
+  db.User.hasMany(db.Post);
+};
+
+Post.associate = (db) => {
+  db.Post.belongsTo(db.User); // 게시글은 작성자에게 속해있다.
+};
+```
+- 위 belongsTo는 Post에 UserId, PostId라는 컬럼을 만들어 준다.
+
+#### 다대다 관계
+
+- 하나의 게시글에 여러개의 해쉬태그를 가질 수 있고, 하나의 해쉬태그가 여러개의 게시글을 가질 수 있다.
+- post와 hashtag간의 다대다 관계
+
+```js
+Post.associate = (db) => {
+  db.Post.belongsToMany(db.Hashtag);
+};
+
+Hashtag.associate = (db) => {
+  db.Hashtag.belongsToMany(db.Post);
+};
+```
+- 다대다 관계에서는 중간테이블이 하나 생긴다. (PostHashtag)
+- HashtagId, PostId 가 서로 짝지어진다.
+- 중간테이블로 인하여 검색이 가능해진다.
+
+- 사용자와 게시글의 좋아요 관계
+```js
+Post.associate = (db) => {
+  db.Post.belongsToMany(db.User, { through: 'Like' });
+};
+
+User.associate = (db) => {
+  db.User.belongsToMany(db.Post, { through: 'Like' });
+};
+```
+- 중간테이블명을 through를 통해서 정해줄 수 있다.
+
+- 관계 정의가 중복될 경우 as를 붙여서 구분해줄 수 있다.
+```js
+Post.associate = (db) => {
+  db.Post.belongsTo(db.User); // post의 작성자
+  db.Post.belongsToMany(db.User, { through: 'Like', as: 'Likers' }); // post의 좋아요를 누른 사람들
+};
+
+User.associate = (db) => {
+  db.User.hasMany(db.Post); // user의 작성글들
+  db.User.belongsToMany(db.Post, { through: 'Like', as: 'Liked' }); // 내가 좋아요를 누른 글들
+};
+```
+- 나중에 as에 따라서 post.getLikers처럼 게시글 좋아요 누른 사람을 가져오게 된다.
+
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 5-4
+## 듣던 강좌 5-6 16:30

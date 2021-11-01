@@ -9,6 +9,9 @@
   "author": "Heroyooi",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mysql2": "^2.3.2",
+    "sequelize": "^6.8.0",
+    "sequelize-cli": "^6.2.0"
   }
 }
