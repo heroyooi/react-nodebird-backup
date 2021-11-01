@@ -333,8 +333,16 @@ axios.defaults.baseURL = 'http://localhost:3065';
 npm i passport passport-local
 ```
 
+### 5.11. 쿠키세션과 전체 로그인 흐름
+
+```command
+npm i express-session cookie-parser
+npm i dotenv
+```
+- 흐름이 이해가 안가면 5-11 강좌 다시 복습할 것
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 5-11
+## 듣던 강좌 5-12
