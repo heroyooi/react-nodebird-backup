@@ -306,8 +306,9 @@ npm i bcrypt
 - 상태 코드
   - 200 성공, 201 잘 생성됨
   - 300 리다이렉트
-  - 400 클라이언트 에러
+  - 400 클라이언트 에러, 401 허가되지 않음
   - 500 서버 에러
+- [HTTP 상태코드](https://developer.mozilla.org/ko/docs/Web/HTTP/Status)
 
 ### 5.9. CORS 문제 해결하기
 
@@ -321,8 +322,19 @@ npm i bcrypt
 npm i cors
 ```
 
+### 5.10. 패스포트로 로그인하기
+
+```js
+axios.defaults.baseURL = 'http://localhost:3065';
+```
+- 중복되는 api 주소명을 sagas/index.js 파일에서 baseURL로 지정해준다.
+
+```command
+npm i passport passport-local
+```
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 5-10
+## 듣던 강좌 5-11
