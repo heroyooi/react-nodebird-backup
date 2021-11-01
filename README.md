@@ -216,6 +216,13 @@ Post.associate = (db) => {
 ```
 - 위 belongsTo는 Post에 UserId, PostId라는 컬럼을 만들어 준다.
 
+```js
+Post.associate = (db) => {
+  db.Post.belongsTo(db.Post, { as: 'Retweet' });
+};
+```
+- as를 붙여주면 자동으로 PostId 컬럼이 생기는 대신 대신에 RetweetId라고 컬럼을 만들어 준다.
+
 #### 다대다 관계
 
 - 하나의 게시글에 여러개의 해쉬태그를 가질 수 있고, 하나의 해쉬태그가 여러개의 게시글을 가질 수 있다.
@@ -260,9 +267,62 @@ User.associate = (db) => {
 ```
 - 나중에 as에 따라서 post.getLikers처럼 게시글 좋아요 누른 사람을 가져오게 된다.
 
+- 같은 테이블에서 다대다 관계를 설정할 때는 중간 테이블내에 생성되는 컬럼명을 따로 지정해준다.
+```js
+User.associate = (db) => {
+  db.User.belongsToMany(db.User, { through: 'Follow', as: 'Followers', foreignKey: 'followingId' });
+  db.User.belongsToMany(db.User, { through: 'Follow', as: 'Followings', foreignKey: 'followerId' });
+};
+```
+
+### 5.7. 시퀄라이즈 sync nodemon
+
+```command
+npm i nodemon
+```
+
+```command
+npx sequelize db:create
+```
+- db 생성
+
+```command
+npm run dev
+```
+- 시퀄라이즈 모델 작성한대로 테이블이 생성된다.
+
+### 5.8. 회원가입 구현하기
+
+- 브라우저(3060), 프론트 서버(Next)(3060), 백엔드 서버(express)(3065), MySQL(3306)
+- 포트 하나가 프로그램 하나라고 생각하면 된다.
+- 브라우저와 프론트 서버는 같은 프로그램
+- 브라우저는 특별히 화면을 보여주기 위해 실행하는 프로그램
+
+```command
+npm i bcrypt
+```
+
+- 요청/응답은 헤더(상태, 용량, 시간, 쿠키)와 바디(데이터)로 구성되어있다.
+- 상태 코드
+  - 200 성공, 201 잘 생성됨
+  - 300 리다이렉트
+  - 400 클라이언트 에러
+  - 500 서버 에러
+
+### 5.9. CORS 문제 해결하기
+
+- 브라우저에서 다른 도메인 서버로 요청을 보낼 때 CORS 문제가 생긴다.
+- 서버에서 서버로 요청할 경우 CORS 문제는 생기지 않음.
+
+- CORS 해결하는 법
+  - 브라우저에서 프론트 서버로 요청을 보낸다. (proxy 방식)
+
+```command
+npm i cors
+```
 
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 5-6 16:30
+## 듣던 강좌 5-10
