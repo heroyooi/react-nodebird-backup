@@ -393,8 +393,14 @@ router.get('/', async (req, res, next) => { // GET /user
 
 - 프론트에서 LOAD_USER_REQUEST 액션을 작성하여 페이지 접근 시 dispatch 해준다.
 
+### 5.17. 게시글 불러오기
+
+```command
+npm i morgan
+```
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 5-17
+## 듣던 강좌 5-18
