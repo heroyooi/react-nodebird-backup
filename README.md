@@ -362,8 +362,39 @@ useEffect(() => {
 
 - [passport-kakao](http://www.passportjs.org/packages/passport-kakao)
 
+### 5.15. credentials로 쿠키 공유하기
+
+- 도메인이 다르면 쿠키도 전달이 되지 않는다.
+- 쿠키를 다른 도메인간에 전달하고 싶다면,
+  - 백엔드 cors의 옵션 중에 credentials를 true로 설정해줘야 한다.
+  - 프론트 axios에서도 api 요청할 때 withCredentials를 true로 설정해줘야 한다.
+
+### 5.16. 내 로그인 정보 매번 불러오기
+
+- routes/user 작성
+
+```js
+router.get('/', async (req, res, next) => { // GET /user
+  try {
+    if (req.user) {
+      const user = await User.findOne({
+        where: { id: req.user.id }
+      });
+      res.status(200).json(user);  
+    } else {
+      res.status(200).json(null);
+    }    
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }  
+});
+```
+
+- 프론트에서 LOAD_USER_REQUEST 액션을 작성하여 페이지 접근 시 dispatch 해준다.
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 5-14
+## 듣던 강좌 5-17
