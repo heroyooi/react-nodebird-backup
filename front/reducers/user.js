@@ -83,7 +83,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       break;
     case FOLLOW_FAILURE:
       draft.followLoading = false;
-      draft.followDone = false;
+      draft.followError = action.error;
       break;
     case UNFOLLOW_REQUEST:
       draft.unfollowLoading = true;
@@ -97,7 +97,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       break;
     case UNFOLLOW_FAILURE:
       draft.unfollowLoading = false;
-      draft.unfollowDone = false;
+      draft.unfollowError = action.error;
       break;
     case LOG_IN_REQUEST:
       draft.logInLoading = true;
@@ -111,7 +111,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       break;
     case LOG_IN_FAILURE:
       draft.logInLoading = false;
-      draft.logInDone = false;
+      draft.logInError = action.error;
       break;
     case LOG_OUT_REQUEST:
       draft.logOutLoading = true;

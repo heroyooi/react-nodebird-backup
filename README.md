@@ -341,8 +341,29 @@ npm i dotenv
 ```
 - 흐름이 이해가 안가면 5-11 강좌 다시 복습할 것
 
+### 5.12 로그인 문제 해결하기
+
+```js
+useEffect(() => {
+  if (me && me.id) {
+    Router.replace('/');
+  }
+}, [me && me.id]);
+
+useEffect(() => {
+  if (signUpDone) {
+    Router.replace('/');
+  }
+}, [signUpDone]);
+```
+- 회원가입 페이지에서 로그인 시 메인으로 리다이렉트
+  - push를 하면 뒤로 가기 버튼 클릭 시 이전 페이지로 가지만, replace를 하면 이전 페이지가 기록에서 사라진다.
+  - 뒤로 가기 했을 경우 이전 페이지가 나오지 않아야 한다면 replace를 써야 한다.
+
+- [passport-kakao](http://www.passportjs.org/packages/passport-kakao)
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 5-12
+## 듣던 강좌 5-14

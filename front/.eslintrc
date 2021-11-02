@@ -30,6 +30,7 @@
     "object-curly-newline": "off",
     "linebreak-style": "off",
     "no-param-reassign": "off",
-    "consistent-return": "off"
+    "consistent-return": "off",
+    "no-alert": "off"
   }
 }
