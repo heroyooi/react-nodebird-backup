@@ -399,8 +399,25 @@ router.get('/', async (req, res, next) => { // GET /user
 npm i morgan
 ```
 
+### 5.18. 게시글 좋아요
+
+- 모델을 정의할 때 associate 선언에 따라 관계 메서드가 생긴다.
+
+```js
+Post.associate = (db) => {
+  db.Post.belongsTo(db.User); // post.addUser, post.getUser, post.setUser
+  db.Post.belongsToMany(db.Hashtag, { through: 'PostHashtag' }); // post.addHashtags
+  db.Post.hasMany(db.Comment); // post.addComments, post.getComments
+  db.Post.hasMany(db.Image); // post.addImages, post.getImages
+  db.Post.belongsToMany(db.User, { through: 'Like', as: 'Likers' }); // post.addLikers, post.removeLikers
+  db.Post.belongsTo(db.Post, { as: 'Retweet' }); // post.addRetweet
+};
+```
+
+- DB 조작할 땐 꼭 await 을 붙여야 한다.
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 5-18
+## 듣던 강좌 5-19
