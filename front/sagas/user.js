@@ -19,7 +19,30 @@ import {
   LOAD_USER_REQUEST,
   LOAD_USER_SUCCESS,
   LOAD_USER_FAILURE,
+  CHANGE_NICKNAME_REQUEST,
+  CHANGE_NICKNAME_SUCCESS,
+  CHANGE_NICKNAME_FAILURE,
 } from '../reducers/user';
+
+function changeNicknameAPI(data) {
+  return axios.patch('/user/nickname', { nickname: data });
+}
+
+function* changeNickname(action) {
+  try {
+    const result = yield call(changeNicknameAPI, action.data);
+    yield put({
+      type: CHANGE_NICKNAME_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: CHANGE_NICKNAME_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
 
 function loadUserAPI() {
   return axios.get('/user');
@@ -34,6 +57,7 @@ function* loadUser() {
       data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: LOAD_USER_FAILURE,
       error: err.response.data,
@@ -53,6 +77,7 @@ function* logIn(action) {
       data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: LOG_IN_FAILURE,
       error: err.response.data,
@@ -71,6 +96,7 @@ function* logOut() {
       type: LOG_OUT_SUCCESS,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: LOG_OUT_FAILURE,
       error: err.response.data,
@@ -90,6 +116,7 @@ function* signUp(action) {
       type: SIGN_UP_SUCCESS,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: SIGN_UP_FAILURE,
       error: err.response.data,
@@ -110,6 +137,7 @@ function* follow(action) {
       data: action.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: FOLLOW_FAILURE,
       error: err.response.data,
@@ -130,11 +158,16 @@ function* unfollow(action) {
       data: action.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: UNFOLLOW_FAILURE,
       error: err.response.data,
     });
   }
+}
+
+function* watchChangeNickname() {
+  yield takeLatest(CHANGE_NICKNAME_REQUEST, changeNickname);
 }
 
 function* watchLoadUser() {
@@ -163,6 +196,7 @@ function* watchSignUp() {
 
 export default function* userSaga() {
   yield all([
+    fork(watchChangeNickname),
     fork(watchLoadUser),
     fork(watchFollow),
     fork(watchUnfollow),

@@ -416,8 +416,92 @@ Post.associate = (db) => {
 
 - DB 조작할 땐 꼭 await 을 붙여야 한다.
 
+- 좋아요 dispatch 시 프론트 서버와 백엔드 서버의 과정
+
+- 1. front/components/PostCard.js
+  - 처음 페이지에서 이벤트 발생 (dispatch 호출)
+```js
+const onLike = useCallback(() => {
+  dispatch({
+    type: LIKE_POST_REQUEST,
+    data: post.id,
+  });
+}, []);
+```
+
+- 2. front/sagas/post.js
+  - 사가의 등록되어있는 함수 실행
+```js
+function likePostAPI(data) {
+  return axios.patch(`/post/${data}/like`);
+}
+
+function* likePost(action) {
+  try {
+    const result = yield call(likePostAPI, action.data); // 위 페이지의 post.id
+    yield put({
+      type: LIKE_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: LIKE_POST_FAILURE,
+      data: err.response.data,
+    });
+  }
+}
+
+function* watchLikePost() {
+  yield takeLatest(LIKE_POST_REQUEST, likePost);
+}
+```
+
+- 3. back/routes/post.js
+  - 백엔드 등록된 라우터 실행
+```js  
+router.patch('/:postId/like', isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await Post.findOne({ where: { id: req.params.postId } });
+    if (!post) {
+      return res.status(403).send('게시글이 존재하지 않습니다.');
+    }
+    await post.addLikers(req.user.id);
+    res.json({ PostId: post.id, UserId: req.user.id }); // 프론트로 PostId, UserId 정보 객체를 넘겨준다.
+  } catch (error) {
+    next(error);
+  }
+});
+```
+
+- 4. front/reducers/post.js
+  - 백엔드에서 내려주는 데이터({ PostId, UserId })를 바탕으로 리덕스 스토어의 모양을 리듀서에서 바꾸어준다.
+```js  
+const reducer = (state = initialState, action) => produce(state, (draft) => {
+  switch (action.type) {
+    case LIKE_POST_SUCCESS: {
+      const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+      post.Likers.push({ id: action.data.UserId });
+      draft.likePostLoading = false;
+      draft.likePostDone = true;
+      break;
+    }    
+    default:
+      break;
+  }
+});
+```
+
+- 5. front/components/PostCard.js
+  - 최종적으로 변형된 스토어의 값을 바탕으로 화면에서 표현해준다.
+```js  
+const PostCard = ({ post }) => {
+  const liked = post.Likers.find((v) => v.id === id);
+  //...
+}
+```
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 5-19
+## 듣던 강좌 5-20
