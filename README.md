@@ -504,4 +504,4 @@ const PostCard = ({ post }) => {
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 5-20
+## 듣던 강좌 5-21

@@ -21,13 +21,19 @@ const FollowButton = ({ post }) => {
         data: post.User.id,
       });
     }
-  }, []);
+  }, [isFollowing]);
 
   if (post.User.id === me.id) {
     return null;
   }
 
-  return <Button loading={followLoading || unfollowLoading} onClick={onClickButton}>{isFollowing ? '언팔로우' : '팔로우'}</Button>;
+  return (
+    <Button
+      loading={followLoading || unfollowLoading}
+      onClick={onClickButton}
+    >{isFollowing ? '언팔로우' : '팔로우'}
+    </Button>
+  );
 };
 
 FollowButton.propTypes = {
