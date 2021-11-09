@@ -590,14 +590,61 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
   - 최종적으로 변형된 스토어의 값을 바탕으로 화면에서 표현해준다.
 ```js  
 const FollowButton = ({ post }) => {
-  const { me, followLoading, unfollowLoading } = useSelector((state) => state.user);
+  const { me } = useSelector((state) => state.user);
   const isFollowing = me?.Followings.find((v) => v.id === post.User.id);
   //...
 }
 ```
 
+### 5.21. 이미지 업로드를 위한 multer
+
+- 폼 태그에 encType="multipart/form-data"를 설정하여 이미지 파일 업로드 처리를 한다.
+- multipart를 백엔드에서 처리하기 위해 multer를 설치한다.
+
+```js
+<Form encType="multipart/form-data" onFinish={onSubmit}>
+  <input type="file" name="image" multiple hidden ref={imageInput} />
+</Form>
+```
+
+```command
+npm i multer
+```
+- multer는 보통 app에 작성하지 않고, 라우터마다 장착한다.
+  - 폼마다 데이터 전송 형식이나 데이터 타입이 다르기 때문에, 개별적으로 라우터마다 넣는다.
+
+- 실습할 때만 하드디스크에 저장하고, 나중에 AWS에 배포하면서 S3 서비스로 대체를 한다.
+- 스토리지 옵션만 S3로 갈아끼워주면된다.
+```js
+// 이미지 업로드 실행
+const upload = multer({
+  storage: multer.diskStorage({ // diskStorage: 컴퓨터의 하드디스크
+    destination(req, file, done) { // 나중엔 AWS S3같은 클라우드에다가 저장한다.
+      done(null, 'uploads');
+    },
+    filename(req, file, done) { // 제로초.png
+      const ext = path.extname(file.originalname); // 확장자 추출(.png)
+      const basename = path.basename(file.originalname, ext); // 제로초
+      done(null, basename + new Date().getTime() + ext); // 제로초15184712891.png
+    }
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 } // 20MB
+});
+
+// 이미지 업로드 후에 실행
+router.post('/images', isLoggedIn, upload.array('image'), async (req, res, next) => { // POST /post/images
+  console.log(req.files); // 업로드된 이미지 정보들
+  res.json(req.files.map((v) => v.filename));
+});
+```
+- input file에서 설정한 name 값 image가 라우터의 upload.array('image')로 전달된다.
+  - array인 이유는 이미지를 여러장 올릴 수 있게 하기 위해서다.
+  - 한 장만 올릴 꺼라면 upload.single('image')을 사용
+  - 이미지가 아니라 텍스트 json이라면 upload.none()
+  - input file이 2개 이상 있을 경우 upload.fields([])를 쓰면 된다.
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 5-21
+## 듣던 강좌 5-22
