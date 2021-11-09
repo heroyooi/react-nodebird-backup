@@ -15,12 +15,33 @@ try {
   fs.mkdirSync('uploads')
 }
 
-router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, 'uploads');
+    },
+    filename(req, file, done) { // 제로초.png
+      const ext = path.extname(file.originalname); // 확장자 추출(.png)
+      const basename = path.basename(file.originalname, ext); // 제로초
+      done(null, basename + '_' + new Date().getTime() + ext); // 제로초15184712891.png
+    }
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 } // 20MB
+});
+
+router.post('/', isLoggedIn, upload.none(), async (req, res, next) => { // POST /post
   try {
     const post = await Post.create({
       content: req.body.content,
       UserId: req.user.id,
     });
+    if (req.body.image) {
+      if (Array.isArray(req.body.image)) { // 이미지를 여러 개 올리면 image: [제로초.png, 부기초.png]
+
+      } else { // 이미지를 하나만 올리면 image: 제로초.png
+
+      }
+    }
     const fullPost = await Post.findOne({
       where: { id: post.id },
       include: [{
@@ -102,19 +123,6 @@ router.delete('/:postId/like', isLoggedIn, async (req, res, next) => { // DELETE
   }
 });
 
-const upload = multer({
-  storage: multer.diskStorage({
-    destination(req, file, done) {
-      done(null, 'uploads');
-    },
-    filename(req, file, done) { // 제로초.png
-      const ext = path.extname(file.originalname); // 확장자 추출(.png)
-      const basename = path.basename(file.originalname, ext); // 제로초
-      done(null, basename + new Date().getTime() + ext); // 제로초15184712891.png
-    }
-  }),
-  limits: { fileSize: 20 * 1024 * 1024 } // 20MB
-});
 router.post('/images', isLoggedIn, upload.array('image'), async (req, res, next) => { // POST /post/images
   console.log(req.files); // 업로드된 이미지 정보들
   res.json(req.files.map((v) => v.filename));
