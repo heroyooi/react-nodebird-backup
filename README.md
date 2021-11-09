@@ -500,6 +500,102 @@ const PostCard = ({ post }) => {
 }
 ```
 
+### 5.20. 팔로우 언팔로우
+
+- 1. front/components/FollowButton.js
+  - 처음 페이지에서 이벤트 발생 (dispatch 호출)
+```js
+const { me } = useSelector((state) => state.user);
+const isFollowing = me?.Followings.find((v) => v.id === post.User.id);
+
+const onClickButton = useCallback(() => {
+  if (isFollowing) {
+    dispatch({
+      type: UNFOLLOW_REQUEST,
+      data: post.User.id,
+    });
+  } else {
+    dispatch({
+      type: FOLLOW_REQUEST,
+      data: post.User.id,
+    });
+  }
+}, [isFollowing]);
+```
+
+- 2. front/sagas/user.js
+  - 사가의 등록되어있는 함수 실행
+```js
+function followAPI(data) {
+  return axios.patch(`/user/${data}/follow`);
+}
+
+function* follow(action) {
+  try {
+    const result = yield call(followAPI, action.data);
+    yield put({
+      type: FOLLOW_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: FOLLOW_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function* watchFollow() {
+  yield takeLatest(FOLLOW_REQUEST, follow);
+}
+```
+
+- 3. back/routes/user.js
+  - 백엔드 등록된 라우터 실행
+```js
+router.patch('/:userId/follow', isLoggedIn, async (req, res, next) => { // PATCH /user/1/follow
+  try {
+    const user = await User.findOne({ where: { id: req.params.userId } });
+    if (!user) {
+      res.status(403).send('없는 사람을 팔로우하려고 하시네요?');
+    }
+    await user.addFollowers(req.user.id);
+    res.status(200).json({ UserId: parseInt(req.params.userId, 10) }); // 프론트로 UserId 객체를 넘겨준다.
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+```
+
+- 4. front/reducers/user.js
+  - 백엔드에서 내려주는 데이터({ UserId })를 바탕으로 리덕스 스토어의 모양을 리듀서에서 바꾸어준다.
+```js  
+const reducer = (state = initialState, action) => produce(state, (draft) => {
+  switch (action.type) {
+    case FOLLOW_SUCCESS:
+      draft.followLoading = false;
+      draft.me.Followings.push({ id: action.data.UserId });
+      draft.followDone = true;
+      break;
+    }    
+    default:
+      break;
+  }
+});
+```
+
+- 5. front/components/FollowButton.js
+  - 최종적으로 변형된 스토어의 값을 바탕으로 화면에서 표현해준다.
+```js  
+const FollowButton = ({ post }) => {
+  const { me, followLoading, unfollowLoading } = useSelector((state) => state.user);
+  const isFollowing = me?.Followings.find((v) => v.id === post.User.id);
+  //...
+}
+```
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
