@@ -643,6 +643,16 @@ router.post('/images', isLoggedIn, upload.array('image'), async (req, res, next)
   - 이미지가 아니라 텍스트 json이라면 upload.none()
   - input file이 2개 이상 있을 경우 upload.fields([])를 쓰면 된다.
 
+### 6.1. 서버사이드렌더링 준비하기
+
+- next-redux-saga 삭제, 필요가 없어짐
+
+```command
+npm rm next-redux-saga
+
+npm i next-redux-wrapper@6.0.2
+```
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
