@@ -646,15 +646,54 @@ router.post('/images', isLoggedIn, upload.array('image'), async (req, res, next)
 ### 6.1. 서버사이드렌더링 준비하기
 
 - next-redux-saga 삭제, 필요가 없어짐
+- next-redux-wrapper 버전 문제로 SSR이 안되서 버전 변경
 
 ```command
 npm rm next-redux-saga
-
 npm i next-redux-wrapper@6.0.2
 ```
+
+- front/pages/index.js 페이지에서 SSR 처리
+  - 기존 useEffect 있던 부분을 삭제하고 getServerSideProps로 옮긴다.
+  - 사가의 END 액션을 통해 프론트에서 SUCCESS 액션을 기다렸다가 처리하고 렌더링 해준다.
+```js
+import { END } from 'redux-saga';
+import wrapper from '../store/configureStore';
+
+// 프론트 서버에서 실행 (브라우저 X)
+export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+  context.store.dispatch({
+    type: LOAD_USER_REQUEST,
+  });
+  context.store.dispatch({
+    type: LOAD_POSTS_REQUEST,
+  });
+  context.store.dispatch(END);
+  await context.store.sagaTask.toPromise();
+});
+```
+
+### 6.2. SSR시 쿠키 공유하기
+
+- SSR의 주체는 프론트서버에서 백엔드 서버로 보내는 것
+  - 브라우저는 개입 조차 못한다.
+  - 서버에서 서버로 보내면 쿠키는 자동으로 보내는 것이 아니다. axios에다가 직접 넣어서 보내줘야 한다.
+
+```js
+import axios from 'axios';
+
+export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+  const cookie = context.req ? context.req.headers.cookie : '';
+  axios.defaults.headers.Cookie = '';
+  if (context.req && cookie) {
+    axios.defaults.headers.Cookie = cookie;
+  }
+  // ...
+});
+```  
 
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 6-1
+## 듣던 강좌 6-3
