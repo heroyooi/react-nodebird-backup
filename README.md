@@ -696,4 +696,4 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 6-3
+## 듣던 강좌 6-3 14:04
