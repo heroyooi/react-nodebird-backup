@@ -690,10 +690,29 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
   }
   // ...
 });
-```  
+```
+
+### 6.5. CSS 서버사이드렌더링
+
+```command
+npm i next
+npm i babel-plugin-styled-components
+```
+
+```json (.babelrc)
+{
+  "preset": ["next/babel"],
+  "plugins": [
+    ["babel-plugin-styled-components", {
+      "ssr": true,
+      "displayName": true
+    }]
+  ]
+}
+```
 
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 6-3 14:04
+## 듣던 강좌 6-6
