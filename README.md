@@ -9,25 +9,25 @@ npm i react react-dom
 npm i prop-types
 ```
 
-### 1.6 Link와 eslint
+### 1-6 Link와 eslint
 
 ```command
 npm i eslint eslint-plugin-import eslint-plugin-react eslint-plugin-react-hooks -D
 ```
 
-### 2.1 antd와 styled-components
+### 2-1 antd와 styled-components
 
 ```command
 npm i antd styled-components @ant-design/icons
 ```
 
-### 2.2 _app.js와 Head
+### 2-2 _app.js와 Head
 
 - 공통되는 부분은 _app.js 파일을 생성해서 연결해주면 된다.
 - _app.js는 pages들의 공통 부분이다.
 - Head로 페이지별 메타 정보와 타이틀 정보를 바꿀 수 있다.
 
-### 3.1 리덕스 설치와 필요성 소개
+### 3-1 리덕스 설치와 필요성 소개
 
 ```command
 npm i redux react-redux next-redux-wrapper
@@ -36,19 +36,19 @@ npm i redux react-redux next-redux-wrapper
 - 컴포넌트는 화면 그리는 것에만 집중해야한다. 데이터까지 다루는 것은 컴포넌트의 역할이 아니다.
 - 컴포넌트에서는 데이터 요청을 안하고, 별도의 모듈이나 라이브러리가 해야한다.
 
-### 3.4 미들웨어와 리덕스 데브툴즈
+### 3-4 미들웨어와 리덕스 데브툴즈
 
 ```command
 npm i redux-devtools-extension
 ```
 
-### 3.10 이미지 캐루셀 구현하기 react-slick
+### 3-10 이미지 캐루셀 구현하기 react-slick
 
 ```command
 npm i react-slick
 ```
 
-### 4.1 redux-thunk 이해하기
+### 4-1 redux-thunk 이해하기
 
 ```js
 function createThunkMiddleware(extraArgument) {
@@ -87,14 +87,14 @@ const loginAction = (data) => {
 
 - 함수를 리턴하는 비동기 action creator 예시
 
-### 4.2 saga 설치하고 generator 이해하기
+### 4-2 saga 설치하고 generator 이해하기
 
 ```command
 npm rm redux-thunk
 npm i redux-saga next-redux-saga
 ```
 
-### 4.3 saga 이펙트 알아보기
+### 4-3 saga 이펙트 알아보기
 
 ```command
 npm i axios
@@ -136,26 +136,26 @@ l.next(); // yield put({ type: LOG_IN_SUCCESS, ... })
 - takeLeading: 여러번 클릭했을 경우 처음 것만 실행 (요청이 여러번 가는 것은 막을 수 없다.)
 - throttle: 제한 시간을 둬서 그 시간만큼 요청도 막을 수 있다. 그 시간 안에는 요청이 한번만 간다.
 
-### 4.7. 바뀐 상태 적용하고 eslint 점검하기
+### 4-7. 바뀐 상태 적용하고 eslint 점검하기
 
 ```command
 npm i -D babel-eslint eslint-config-airbnb eslint-plugin-import eslint-plugin-react-hooks
 npm i -D eslint-plugin-jsx-a11y
 ```
 
-### 4.8. 게시글 댓글 saga 작성하기
+### 4-8. 게시글 댓글 saga 작성하기
 
 ```command
 npm i shortid
 ```
 
-### 4.10. immer 도입하기
+### 4-10. immer 도입하기
 
 ```command
 npm i immer
 ```
 
-### 4.11. faker로 실감나는 더미데이터 만들기
+### 4-11. faker로 실감나는 더미데이터 만들기
 
 ```command
 npm i faker
@@ -163,7 +163,7 @@ npm i faker
 
 ## Back-end
 
-### 5.2. 익스프레스로 라우팅하기
+### 5-2. 익스프레스로 라우팅하기
 
 ```command
 npm init
@@ -184,7 +184,7 @@ npm i express
 
 - [Swagger | API 문서 뽑는 프로그램](https://swagger.io)
 
-### 5.4. MySQL과 시퀄라이즈 연결하기
+### 5-4. MySQL과 시퀄라이즈 연결하기
 
 - [MySQL 다운로드](https://dev.mysql.com/downloads/installer)
 
@@ -198,7 +198,7 @@ npx sequelize init
 
 - mysql에서는 테이블 = sequelize에서는 모델
 
-### 5.6. 시퀄라이즈 관계 설정하기
+### 5-6. 시퀄라이즈 관계 설정하기
 
 #### 1대다 관계
 
@@ -275,7 +275,7 @@ User.associate = (db) => {
 };
 ```
 
-### 5.7. 시퀄라이즈 sync nodemon
+### 5-7. 시퀄라이즈 sync nodemon
 
 ```command
 npm i nodemon
@@ -291,7 +291,7 @@ npm run dev
 ```
 - 시퀄라이즈 모델 작성한대로 테이블이 생성된다.
 
-### 5.8. 회원가입 구현하기
+### 5-8. 회원가입 구현하기
 
 - 브라우저(3060), 프론트 서버(Next)(3060), 백엔드 서버(express)(3065), MySQL(3306)
 - 포트 하나가 프로그램 하나라고 생각하면 된다.
@@ -310,7 +310,7 @@ npm i bcrypt
   - 500 서버 에러
 - [HTTP 상태코드](https://developer.mozilla.org/ko/docs/Web/HTTP/Status)
 
-### 5.9. CORS 문제 해결하기
+### 5-9. CORS 문제 해결하기
 
 - 브라우저에서 다른 도메인 서버로 요청을 보낼 때 CORS 문제가 생긴다.
 - 서버에서 서버로 요청할 경우 CORS 문제는 생기지 않음.
@@ -322,7 +322,7 @@ npm i bcrypt
 npm i cors
 ```
 
-### 5.10. 패스포트로 로그인하기
+### 5-10. 패스포트로 로그인하기
 
 ```js
 axios.defaults.baseURL = 'http://localhost:3065';
@@ -333,7 +333,7 @@ axios.defaults.baseURL = 'http://localhost:3065';
 npm i passport passport-local
 ```
 
-### 5.11. 쿠키세션과 전체 로그인 흐름
+### 5-11. 쿠키세션과 전체 로그인 흐름
 
 ```command
 npm i express-session cookie-parser
@@ -341,7 +341,7 @@ npm i dotenv
 ```
 - 흐름이 이해가 안가면 5-11 강좌 다시 복습할 것
 
-### 5.12 로그인 문제 해결하기
+### 5-12 로그인 문제 해결하기
 
 ```js
 useEffect(() => {
@@ -362,14 +362,14 @@ useEffect(() => {
 
 - [passport-kakao](http://www.passportjs.org/packages/passport-kakao)
 
-### 5.15. credentials로 쿠키 공유하기
+### 5-15. credentials로 쿠키 공유하기
 
 - 도메인이 다르면 쿠키도 전달이 되지 않는다.
 - 쿠키를 다른 도메인간에 전달하고 싶다면,
   - 백엔드 cors의 옵션 중에 credentials를 true로 설정해줘야 한다.
   - 프론트 axios에서도 api 요청할 때 withCredentials를 true로 설정해줘야 한다.
 
-### 5.16. 내 로그인 정보 매번 불러오기
+### 5-16. 내 로그인 정보 매번 불러오기
 
 - routes/user 작성
 
@@ -393,13 +393,13 @@ router.get('/', async (req, res, next) => { // GET /user
 
 - 프론트에서 LOAD_USER_REQUEST 액션을 작성하여 페이지 접근 시 dispatch 해준다.
 
-### 5.17. 게시글 불러오기
+### 5-17. 게시글 불러오기
 
 ```command
 npm i morgan
 ```
 
-### 5.18. 게시글 좋아요
+### 5-18. 게시글 좋아요
 
 - 모델을 정의할 때 associate 선언에 따라 관계 메서드가 생긴다.
 
@@ -500,7 +500,7 @@ const PostCard = ({ post }) => {
 }
 ```
 
-### 5.20. 팔로우 언팔로우
+### 5-20. 팔로우 언팔로우
 
 - 1. front/components/FollowButton.js
   - 처음 페이지에서 이벤트 발생 (dispatch 호출)
@@ -596,7 +596,7 @@ const FollowButton = ({ post }) => {
 }
 ```
 
-### 5.21. 이미지 업로드를 위한 multer
+### 5-21. 이미지 업로드를 위한 multer
 
 - 폼 태그에 encType="multipart/form-data"를 설정하여 이미지 파일 업로드 처리를 한다.
 - multipart를 백엔드에서 처리하기 위해 multer를 설치한다.
@@ -643,7 +643,7 @@ router.post('/images', isLoggedIn, upload.array('image'), async (req, res, next)
   - 이미지가 아니라 텍스트 json이라면 upload.none()
   - input file이 2개 이상 있을 경우 upload.fields([])를 쓰면 된다.
 
-### 6.1. 서버사이드렌더링 준비하기
+### 6-1. 서버사이드렌더링 준비하기
 
 - next-redux-saga 삭제, 필요가 없어짐
 - next-redux-wrapper 버전 문제로 SSR이 안되서 버전 변경
@@ -673,7 +673,7 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
 });
 ```
 
-### 6.2. SSR시 쿠키 공유하기
+### 6-2. SSR시 쿠키 공유하기
 
 - SSR의 주체는 프론트서버에서 백엔드 서버로 보내는 것
   - 브라우저는 개입 조차 못한다.
@@ -692,7 +692,7 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
 });
 ```
 
-### 6.5. CSS 서버사이드렌더링
+### 6-5. CSS 서버사이드렌더링
 
 ```command
 npm i next
@@ -711,8 +711,18 @@ npm i babel-plugin-styled-components
 }
 ```
 
+### 6-6. 사용자 게시글 해시태그 게시글
+
+```js
+encodeURIComponent('리액트');
+// '%EB%A6%AC%EC%95%A1%ED%8A%B8'
+
+decodeURIComponent('%EB%A6%AC%EC%95%A1%ED%8A%B8')
+// 리액트
+```
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 6-6
+## 듣던 강좌 6-7
