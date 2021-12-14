@@ -721,6 +721,21 @@ decodeURIComponent('%EB%A6%AC%EC%95%A1%ED%8A%B8')
 // 리액트
 ```
 
+### 6-7. getStaticPaths
+
+- 다이나믹 라우팅일 때 getStaticProps를 사용하면 무조건 getStaticPaths가 있어야 한다.
+
+### 6-8. swr 사용해보기
+
+```command
+npm i swr
+```
+
+```js
+import useSWR from 'swr';
+```
+- SSR 처리가 필요 없는 dispatch
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)

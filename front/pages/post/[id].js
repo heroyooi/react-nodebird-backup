@@ -17,6 +17,10 @@ const Post = () => {
 
   const rootUrl = 'http://localhost:3060';
 
+  // if (router.isFallback) {
+  //   return <div>로딩중...</div>;
+  // }
+
   return (
     <AppLayout>
       <Head>
@@ -34,6 +38,17 @@ const Post = () => {
     </AppLayout>
   );
 };
+
+// export async function getStaticPaths() {
+//   return {
+//     paths: [
+//       { params: { id: '5' } },
+//       { params: { id: '6' } },
+//       { params: { id: '7' } },
+//     ],
+//     fallback: false,
+//   };
+// }
 
 export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
   const cookie = context.req ? context.req.headers.cookie : '';
