@@ -736,8 +736,54 @@ import useSWR from 'swr';
 ```
 - SSR 처리가 필요 없는 dispatch
 
+### 6-10. moment와 next 빌드하기
+
+```command
+npm i moment
+```
+
+- 서버에 배포 이전에 빌드를 한다.
+- 빌드를 하면 html, css, js로 결과물이 나온다.
+- 웹서버로 그 결과물들을 올려두면 사용자들의 브라우저로 전달된다.
+
+```command
+npm run build
+```
+
+- 코드를 바꾸면 Github에 푸쉬를 한다.
+- CI/CD 도구로 코드에 대한 테스트와 빌드를 해준다. (젠킨스, 써클CI, 트레비스CI)
+- AWS 서버로 배포를 해준다.
+
+- 빌드를 하면 페이지 파일별로 λ, ○, ● 표시가 붙는다.
+  - λ(람다): getServerSideProps, SSR 페이지들
+  - ●: getStaticProps, 미리 html 파일로 만들어져 있는 페이지들
+  - ○: 정적 페이지, 404, 500 에러페이지들을 커스텀할 수 있다.
+    - [Next - Custom Error Page](https://nextjs.org/docs/advanced-features/custom-error-page)
+
+### 6-11. 커스텀 웹팩과 bundle-analyzer    
+
+```command
+npm i @next/bundle-analyzer@9.4.4
+```
+
+- [Next - next.config.js - Custom Webpack Config](https://nextjs.org/docs/api-reference/next.config.js/custom-webpack-config)
+- [Github - next-bundle-analyzer](https://github.com/vercel/next.js/tree/canary/packages/next-bundle-analyzer)
+
+- process.env 설정하는 방법: package.json의 scripts 부분을 수정해주면 된다.
+```command
+npm i cross-env
+```
+```json (package.json)
+{
+  "scripts": {
+    "build": "cross-env ANALYZE=true NODE_ENV=production next build"
+  },
+}
+```
+- 만약 노드 버전이 12버전이면 빌드가 안될 수 있다. 노드 16버전으로 업그레이드 빌드 성공
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 
-## 듣던 강좌 6-9
+## 듣던 강좌 7-1
