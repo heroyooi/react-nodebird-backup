@@ -964,6 +964,8 @@ node -v
 npm i
 ```
 
+#### back 서버(리눅스)에 mysql 설치
+
 - 원래는 mysql도 서버를 따로 두는 것이 좋다. 하지만 서버 3대를 연결하면 너무 복잡해지니, 이 예제에선 백엔드서버 안에다가 설치하도록 한다.
 
 ```command
@@ -1032,11 +1034,71 @@ npm start
 vim app.js
 ```
 
+- app.js 포트 번호 부분 수정
+
 ```js
 app.listen(80, () => {
   console.log("서버 실행 중 !!!");
 });
 ```
+
+```command
+npm start
+```
+
+- [back 서버 확인](http://54.221.180.194)
+
+##### pm2, 포그라운드 프로세스가 아닌 백그라운드 프로세스로 실행
+
+```command
+npm i pm2
+```
+
+- pm2 설치 후 scripts의 start 명령어 변경
+
+```json (package.json)
+{
+  "scripts": {
+    "start": "pm2 start app.js"
+  }
+}
+```
+
+- 루트에서만 80번 포트에 접근 권한이 있기 때문에 sudo 명령어로 실행을 해줘야 한다.
+
+```command
+sudo npm start && sudo npx pm2 monit
+```
+
+- 서비스가 pm2로 시작된다.
+  - 포그라운드로 실행 했으면 서버 구동하느라 다른 명령어를 실행할 수 없다.
+
+#### 기타 pm2 명령어
+
+- pm2 끄기
+
+```command
+sudo npx pm2 kill
+```
+
+- pm2 항목 조회
+
+```command
+sudo npx pm2 list
+```
+
+- app.js 실행
+
+```command
+sudo npx pm2 start app.js
+```
+
+```command
+sudo npx pm2 reload all
+```
+
+- 우분투 리눅스는 루트와 일반 사용자를 넘나들 수 있고, 루트와 일반 사용자의 권한이 다르다.
+- sudo 를 계속 부텽
 
 #### front 서버(리눅스)에 빌드
 
