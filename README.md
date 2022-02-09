@@ -891,7 +891,7 @@ npm i cross-env
 - pem키가 있는 경로(저장소 루트)에서 아래 명령어를 통해 pem 키를 사용해서 원격에 있는 AWS EC2서버로 접근함
 
 ```command
-ssh -i "react-nodebird-aws.pem" ubuntu@ec2-3-91-79-250.compute-1.amazonaws.com
+ssh -i "react-nodebird-aws.pem" ubuntu@ec2-3-226-66-187.compute-1.amazonaws.com
 ```
 
 - Are you sure you want to continue connecting? yes
@@ -944,7 +944,7 @@ npm i
 - pem키가 있는 경로(저장소 루트)에서 아래 명령어를 통해 pem 키를 사용해서 원격에 있는 AWS EC2서버로 접근함
 
 ```command
-ssh -i "react-nodebird-aws.pem" ubuntu@ec2-54-196-213-12.compute-1.amazonaws.com
+ssh -i "react-nodebird-aws.pem" ubuntu@ec2-50-16-186-189.compute-1.amazonaws.com
 ```
 
 - Are you sure you want to continue connecting? yes
@@ -1015,7 +1015,7 @@ npm start
 vim .env
 ```
 
-- a로 insert 모드에서 작성 후 ESC 키로 편집모드에서 빠져나간 이후 :wq 로 저장 후 종료
+- a로 insert 모드에서 작성 후 ESC 키로 편집모드에서 빠져나간 이후 :wq 로 저장 후 종료, :q는 그냥 종료
 
 ```command
 cat .env
@@ -1098,12 +1098,20 @@ sudo npx pm2 reload all
 ```
 
 - 우분투 리눅스는 루트와 일반 사용자를 넘나들 수 있고, 루트와 일반 사용자의 권한이 다르다.
-- sudo 를 계속 부텽
+
+##### 리눅스 서버에서 git pull 하다가 충돌이 나는 경우
+
+```command
+git reset --hard
+git pull
+```
 
 #### front 서버(리눅스)에 빌드
 
 ```command
 npm run build
+npm start
+npx pm2 monit
 ```
 
 - 메모리가 모자르면 build가 안될 수도 있다. aws에서 임대한 컴퓨터는 메모리가 1GB 밖에 안되기 때문에 그럴 가능성이 있다. 그럴때는 인스턴스에서 메모리를 늘려주어야 한다.
@@ -1119,10 +1127,135 @@ npm run build
 - sudo apt-get update 이런 명령어를 하나씩 수동하는 것이 귀찮으면 도커를 배우면 좋다.
 - 서버 한대 띄우면 도커에 명령어를 싹 적어놓고, 도커 실행되면 명령어가 알아서 하나씩 실행되면서 기존 서버와 똑같은 서버를 만들어냄
 
+#### nginx
+
+- front는 next(3060) 서버가 구동되고, back은 express(3065) 서버가 구동됨
+- nginx(80)으로 요청이 들어오면 next(3060) & express(3065) 로 요청을 보내준다.
+- 왜 이렇게 하냐면? https(443) 요청이 들어오면 SSL을 붙여서 다시 next(3060) & express(3065) 로 요청을 보내준다.
+
+- front, back에 nginx 설치
+
+```command
+sudo apt-get install -y nginx
+vim /etc/nginx/nginx.conf
+```
+
+- 부분 수정 (back)
+
+```conf
+{
+        ##
+        # Virtual Host Configs
+        ##
+
+        include /etc/nginx/conf.d/*.conf;
+        include /etc/nginx/sites-enabled/*;
+        server {
+                server_name api.nodebird.tk;
+                listen 80;
+                location / {
+                        proxy_set_header HOST $host;
+                        proxy_pass http://127.0.0.1:3065;
+                        proxy_redirect off;
+                }
+        }
+}
+```
+
+- 부분 수정 (front)
+
+```conf
+{
+        ##
+        # Virtual Host Configs
+        ##
+
+        include /etc/nginx/conf.d/*.conf;
+        include /etc/nginx/sites-enabled/*;
+        server {
+                server_name nodebird.tk;
+                listen 80;
+                location / {
+                        proxy_set_header HOST $host;
+                        proxy_pass http://127.0.0.1:3060;
+                        proxy_redirect off;
+                }
+        }
+}
+```
+
+```command
+systemctl status nginx.service
+```
+
+- nginx 에러 체크
+
+```command
+lsof -i tcp:80
+kill -9 10015
+```
+
+- 80번 포트 사용처가 있으면 pid 조회 및 제거
+
+```command
+systemctl start nginx
+systemctl restart nginx
+```
+
+- 고대디, 가비아, 후이즈 같은 업체에서 도메인을 구매
+- 도메인을 사면 네임서버를 준다. 거기서 네임 서버를 알아낸다.
+
+- Route 53 > 호스팅 영역 > 호스팅 영역 생성
+- 도메인 이름: nodebird.tk
+- 호스팅 영역을 생성하면 해당 레코드(nodebird.tk) NS 유형의 값들로, 위에서 알아낸 네임 서버들을 바꿔준다.
+
+  - 예시) AWS DNS
+  - ns-864.awsdns-44.net.
+  - ns-455.awsdns-56.com.
+  - ns-1938.awsdns-50.co.uk.
+  - ns-1172.awsdns-18.org.
+  - 도메인에 대한 관리권을 aws로 넘긴다.
+
+- [freenom](https://www.freenom.com/en/index.html?lang=en)
+- freenom에서 무료 도메인 생성 및 dns 네임서버 aws 정보로 입력
+
+#### 탄력적 IP
+
+- 네트워크 및 보안 > 탄력적 IP > 탄력적 IP 주소 할당 (2개 생성)
+- ★ 탄력적 IP는 인스턴스랑 연결하면 무료인데, 인스턴스 지우고 탄력적 IP만 남아있으면 비용이 생긴다. 그래서 인스턴스를 지우고 탄력적 IP도 같이 지워줘야 한다.
+- 할당 IP 체크 후 작업 SELECT > 탄력적 IP 주소 연결 > 인스턴스 조회 후 선택해서 연결 클릭
+
+#### 탄력적 IP로 인해 주소가 바뀌었으니 다시 인스턴스 ssh 연결
+
+- front 인스턴스 ssh
+
+```command
+ssh -i "react-nodebird-aws.pem" ubuntu@ec2-3-226-66-187.compute-1.amazonaws.com
+```
+
+- back 인스턴스 ssh
+
+```command
+ssh -i "react-nodebird-aws.pem" ubuntu@ec2-50-16-186-189.compute-1.amazonaws.com
+```
+
+- [FRONT 서버](3.226.66.187)
+- [BACK 서버](50.16.186.189)
+
+#### Route 53 > 호스팅 영역 > nodebird.tk
+
+- 레코드 생성 > 레코드 (유형: A + 값: 3.226.66.187)
+- 레코드 생성 > 레코드 (이름: api + 레코드 유형 A + 값 50.16.186.189)
+
+- www.nodebird.tk 등록하고 싶으면 레코드 생성 > 레코드 (이름: www + 유형: CNAME)
+
+- DNS 등록 성공하면
+- [등록한 API 주소](http://api.nodebird.tk)
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 - [강좌 저장소](https://github.com/ZeroCho/react-nodebird)
 - [aws](https://aws.amazon.com/ko)
 
-## 강좌 7-1
+## 강좌 7-1 01:45:20
