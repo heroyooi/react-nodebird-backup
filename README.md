@@ -855,6 +855,7 @@ npm i cross-env
 
 - [AWS 관리 콘솔](https://console.aws.amazon.com)
 - EC2 > 인스턴스 시작 > Ubuntu Server 18.04 LTS(프리티어 사용 가능) > 검토 및 시작
+  - 백엔드 서버는 mysql 버전 문제로 인해서 Ubuntu Server 20.04 LTS(프리티어) 로 진행
   - 실무에선 프리티어가 성능도 낮고 제한적이다. 초기 단계 서비스는 가능하다.
   - 실무에선 "3. 인스턴스 구성"에서 모니터링 활성화가 필요하다.
   - "6. 보안 그룹 구성"에서 규칙 추가 HTTP(80), HTTPS(443)
@@ -874,10 +875,141 @@ npm i cross-env
 * 실습할 때만 서버를 켜두고, 그 이외 시간엔 작업 SELECT 에서 인스턴스 상태 설정 > 중지 OR 종료
 
 - gitignore 항목에 필수로 추가 해야할 4가지
+
   - react-nodebird-aws.pem
   - node_modules
   - .env
   - .next
+
+### aws 서버 접근 및 설치
+
+- aws에다가 소스코드를 보낼껀데, ftp 방식으로 보낼수도 있고, git 저장소를 통해서 다운받게 할 수 있다.
+
+#### front 서버(리눅스)에 nodejs 설치
+
+- 인스턴스 front 선택 후 연결 클릭 > SSH 클라이언트의 주소 복사
+- pem키가 있는 경로(저장소 루트)에서 아래 명령어를 통해 pem 키를 사용해서 원격에 있는 AWS EC2서버로 접근함
+
+```command
+ssh -i "react-nodebird-aws.pem" ubuntu@ec2-3-91-79-250.compute-1.amazonaws.com
+```
+
+- Are you sure you want to continue connecting? yes
+
+```command
+git clone https://github.com/heroyooi/react-nodebird
+```
+
+- ubuntu는 폴더 기반이라서 특정 폴더에 들어있다.
+  - pwd 명령어로 어느 폴더 안에 들어있는지 알 수 있다.
+  - ls 명령어로 현재 경로에서 폴더를 확인할 수 있다.
+  - ls -al 명령어로 자세하게 볼 수 있다.
+
+```command
+cd react-nodebird
+ls
+cd front
+ls -al
+git pull
+```
+
+- [데비안과 우분투 기반 리눅스에서 nodejs 설치법](https://nodejs.org/ko/download/package-manager/#debian-and-ubuntu-based-linux-distributions-enterprise-linux-fedora-and-snap-packages)
+- [공식 Node.js 바이너리 배포 NodeSource](https://github.com/nodesource/distributions/blob/master/README.md)
+
+- 리눅스 명령어 5줄 그대로 실행
+
+```command
+sudo apt-get update
+sudo apt-get install -y build-essential
+sudo apt-get install curl
+curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash --
+sudo apt-get install -y nodejs
+```
+
+- 잘 설치되었는지 확인
+
+```command
+node -v
+npm -v
+```
+
+```command
+npm i
+```
+
+#### back 서버(리눅스)에 nodejs 설치
+
+- 인스턴스 back 선택 후 연결 클릭 > SSH 클라이언트의 주소 복사
+- pem키가 있는 경로(저장소 루트)에서 아래 명령어를 통해 pem 키를 사용해서 원격에 있는 AWS EC2서버로 접근함
+
+```command
+ssh -i "react-nodebird-aws.pem" ubuntu@ec2-54-196-213-12.compute-1.amazonaws.com
+```
+
+- Are you sure you want to continue connecting? yes
+
+```command
+git clone https://github.com/heroyooi/react-nodebird
+cd react-nodebird
+cd back
+
+sudo apt-get update
+sudo apt-get install -y build-essential
+sudo apt-get install curl
+curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash --
+sudo apt-get install -y nodejs
+
+node -v
+npm i
+```
+
+- 원래는 mysql도 서버를 따로 두는 것이 좋다. 하지만 서버 3대를 연결하면 너무 복잡해지니, 이 예제에선 백엔드서버 안에다가 설치하도록 한다.
+
+```command
+sudo apt-get install mysql-server
+```
+
+- Ubuntu Server 18.04 LTS를 사용하면 기본 MySQL이 5버전으로 설치되므로, 백엔드서버는 Ubuntu Server 20.04 LTS를 사용해야 한다.
+- Ubuntu Server 18.04 LTS에서 MySQL 5버전 설치 실패(강좌대로 했지만 안된다.)
+
+```command
+sudo su
+mysql_secure_installation
+y
+0
+```
+
+- 사용자가 루트 바뀌고 비밀번호 재설정
+- 나머지 질문들은 다 y로 선택
+
+```command
+mysql -uroot -p
+```
+
+- 빠져나오려면 exit
+
+```command
+mysql> exit;
+```
+
+#### front 서버(리눅스)에 빌드
+
+```command
+npm run build
+```
+
+- 메모리가 모자르면 build가 안될 수도 있다. aws에서 임대한 컴퓨터는 메모리가 1GB 밖에 안되기 때문에 그럴 가능성이 있다. 그럴때는 인스턴스에서 메모리를 늘려주어야 한다.
+
+- 계속해서 소스 코드를 서버로 배포하는 과정
+  - 깃헙으로 소스를 보냄
+  - 원격 서버에 접속해서 소스를 받음
+  - (원격 서버) npm이 추가되어 있을 수 있으니 npm i를 실행해줌
+  - (원격 서버) npm run build
+  - (원격 서버) npm start
+- 이런 걸 대신해주는 CI/CD 툴을 사용한다.
+
+- sudo apt-get update 이런 명령어를 하나씩 수동하는 것이 귀찮으면 도커를 배우면 좋다.
+- 서버 한대 띄우면 도커에 명령어를 싹 적어놓고, 도커 실행되면 명령어가 알아서 하나씩 실행되면서 기존 서버와 똑같은 서버를 만들어냄
 
 ## 참고 링크
 
