@@ -48,6 +48,10 @@ app.use('/hashtag', hashtagRouter);
 // 에러처리 미들웨어
 // app.use((err, req, res, next) => {...});
 
+app.get('/', (req, res) => {
+  res.send('hello express');
+})
+
 app.listen(3065, () => {
   console.log('서버 실행 중 !!!');
 });

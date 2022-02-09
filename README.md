@@ -904,6 +904,7 @@ git clone https://github.com/heroyooi/react-nodebird
   - pwd 명령어로 어느 폴더 안에 들어있는지 알 수 있다.
   - ls 명령어로 현재 경로에서 폴더를 확인할 수 있다.
   - ls -al 명령어로 자세하게 볼 수 있다.
+  - ls -a 숨겨진 파일 조회 (.env)
 
 ```command
 cd react-nodebird
@@ -981,15 +982,60 @@ y
 
 - 사용자가 루트 바뀌고 비밀번호 재설정
 - 나머지 질문들은 다 y로 선택
+- 하지만 비번이 인식이 안되었다. 그래서 아래와 같이 비밀번호 재변경
 
 ```command
 mysql -uroot -p
+```
+
+- 비번 입력하고 mysql 명령어 입력
+
+```command
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'qwer1234';
 ```
 
 - 빠져나오려면 exit
 
 ```command
 mysql> exit;
+```
+
+- back 폴더의 package.json에 스크립트 "start": "node app" 추가
+
+```command
+git pull
+npm start
+```
+
+- 에러가 나는데 이유는 .env 파일이 back 폴더 안에 없기 때문
+
+```command
+vim .env
+```
+
+- a로 insert 모드에서 작성 후 ESC 키로 편집모드에서 빠져나간 이후 :wq 로 저장 후 종료
+
+```command
+cat .env
+```
+
+- .env를 제대로 작성했는지 확인
+
+```command
+npx sequelize db:create
+npm start
+```
+
+- 포트 번호가 3065이므로 80으로 변경해줘야한다.
+
+```command
+vim app.js
+```
+
+```js
+app.listen(80, () => {
+  console.log("서버 실행 중 !!!");
+});
 ```
 
 #### front 서버(리눅스)에 빌드
@@ -1016,3 +1062,5 @@ npm run build
 - [Next 공식문서](https://nextjs.org)
 - [강좌 저장소](https://github.com/ZeroCho/react-nodebird)
 - [aws](https://aws.amazon.com/ko)
+
+## 강좌 7-1
