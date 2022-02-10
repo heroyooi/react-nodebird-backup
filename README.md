@@ -1559,6 +1559,10 @@ router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
   - 아시아 태평양(서울): ap-northeast-2
 - 프론트에서도 backUrl이 들어갔던 이미지 경로 부분에서 s3 고유 경로로 바뀌기 때문에 backUrl을 제거 해줘야한다.
 
+#### Lambda
+
+- 강좌 7-3, 40:00 부터 시작
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
