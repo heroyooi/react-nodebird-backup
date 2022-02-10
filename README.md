@@ -886,7 +886,7 @@ npm i cross-env
   - .env
   - .next
 
-### aws 서버 접근 및 설치
+#### aws 서버 접근 및 설치
 
 - aws에다가 소스코드를 보낼껀데, ftp 방식으로 보낼수도 있고, git 저장소를 통해서 다운받게 할 수 있다.
 
@@ -1007,6 +1007,19 @@ mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'q
 mysql> exit;
 ```
 
+- react-nodebird DB의 테이블 조회
+
+```command
+mysql> use react-nodebird;
+mysql> show tables;
+```
+
+- DB 지우기
+
+```command
+mysql> DROP DATABASE `react-nodebird`;
+```
+
 - back 폴더의 package.json에 스크립트 "start": "node app" 추가
 
 ```command
@@ -1069,6 +1082,8 @@ npm i pm2
 }
 ```
 
+#### 백엔드 서버 구동
+
 - 루트에서만 80번 포트에 접근 권한이 있기 때문에 sudo 명령어로 실행을 해줘야 한다.
 
 ```command
@@ -1077,6 +1092,12 @@ sudo npm start && sudo npx pm2 monit
 
 - 서비스가 pm2로 시작된다.
   - 포그라운드로 실행 했으면 서버 구동하느라 다른 명령어를 실행할 수 없다.
+
+```command
+sudo npx pm2 reload all
+```
+
+- 서버 재기동
 
 #### 기타 pm2 명령어
 
@@ -1334,6 +1355,8 @@ app.use(
 
 - 프론트는 소스가 바뀌면 빌드과정이 꼭 필요하다. 백엔드는 필요 없음
 
+#### 프론트 서버 기동
+
 ```command
 npm run build
 npx pm2 start npm -- start
@@ -1341,10 +1364,38 @@ npx pm2 start npm -- start
 
 - pm2를 통해서 npm start
 
+#### 백엔드 서버(리눅스) 기동
+
+```command
+sudo npm start
+sudo npx pm2 monit
+```
+
+- 백엔드 서버 pm2로 기동 및 모니터링
+
+```command
+sudo npx pm2 reload all
+```
+
+- 백엔드 서버 재기동
+
+### 7-3. aws s3 & lambda
+
+- CORS는 해결되어서 로그인은 가능해졌으니, 쿠키가 저장이 되지 않는다.
+- Response Headers의 Set-Cookie가 있으면 브라우저에 쿠키를 넣어주는데, Domain이 valid하지 않아서 에러가 쿠키가 세팅되지 않는다.
+  - Network > Headers > General > Request URL(요청을 보낸 곳) 이랑,
+    Network > Headers > Response Headers의 Set-Cookie의 Domain(or Access-Control-Allow-Origin)이 다르면 쿠키가 공유되지 않는다. 그래서 nodebird.tk 로 통일을 해줘야 한다.
+
+#### 도메인
+
+- 1년 단위로 빌리는 개념, gabia 1년 도메인 22,000원
+- 네임서버 설정 => aws > Route 53
+  <img src="aws_route53.png" />
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 - [강좌 저장소](https://github.com/ZeroCho/react-nodebird)
 - [aws](https://aws.amazon.com/ko)
 
-## 강좌 7-2
+## 강좌 7-3
