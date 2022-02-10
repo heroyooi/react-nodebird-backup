@@ -1106,7 +1106,7 @@ git reset --hard
 git pull
 ```
 
-#### front 서버(리눅스)에 빌드
+#### 프론트 서버(리눅스)에 빌드
 
 ```command
 npm run build
@@ -1252,10 +1252,63 @@ ssh -i "react-nodebird-aws.pem" ubuntu@ec2-50-16-186-189.compute-1.amazonaws.com
 - DNS 등록 성공하면
 - [등록한 API 주소](http://api.nodebird.tk)
 
+#### 프론트 서버(리눅스) 구동
+
+- package.json 파일의 scripts start 부분 아래와 같이 수정
+
+```json
+{
+  "scripts": {
+    "start": "cross-env NODE_ENV=production next start -p 3060"
+  }
+}
+```
+
+- ssh 로 프론트 서버 원격 접속해서 아래 명령어 실행
+
+```command
+npx pm2 start npm --name "next" --start
+```
+
+- 서버 구동 잘됐는지 확인 및 에러 확인
+
+```command
+npx pm2 monit
+```
+
+- 재부팅
+
+```command
+npx pm2 reload all
+```
+
+- 재부팅 확인
+
+```command
+npx pm2 list
+```
+
+- nginx 를 너무 빨리 붙여서 문제가 생김.
+- 도메인을 먼저 붙이면 HSTS로 인해 문제가 생긴다. (IP인 상태에서 접속을 해야 진행 가능)
+
+```command
+sudo su
+lsof -i tcp:80
+```
+
+- nginx PID(29917) 확인 후 kill
+
+```command
+kill -9 29917
+lsof -i tcp:80
+```
+
+- 네트워크 및 보안 > 탄력적 IP > 체크 후 작업 클릭 > 탄력적 IP 주소 연결 해제 및 릴리스
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
 - [강좌 저장소](https://github.com/ZeroCho/react-nodebird)
 - [aws](https://aws.amazon.com/ko)
 
-## 강좌 7-1 01:45:20
+## 강좌 7-2
