@@ -1562,6 +1562,20 @@ router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
 #### Lambda
 
 - 강좌 7-3, 40:00 부터 시작
+- Lambda는 한가지 기능을 하는 작은 함수(작은 컴퓨터)
+
+- 루트에서 lambda 폴더 생성하고 그 안에서 실습
+
+```command
+npm init
+npm i aws-sdk sharp
+```
+
+- sharp: 이미지 리사이징
+
+  - [sharp > API > Resizing images](https://sharp.pixelplumbing.com/api-resize)
+
+- Lambda는 aws 서버 자체해서 돌려줘서 따로 인증 절차가 필요 없다.
 
 ## 참고 링크
 
@@ -1569,4 +1583,4 @@ router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
 - [강좌 저장소](https://github.com/ZeroCho/react-nodebird)
 - [aws](https://aws.amazon.com/ko)
 
-## 강좌 7-3
+## 강좌 7-3 43:43
