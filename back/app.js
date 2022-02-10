@@ -25,7 +25,7 @@ passportConfig();
 
 app.use(morgan('dev'));
 app.use(cors({
-  origin: 'http://localhost:3060',
+  origin: ['http://localhost:3060', 'nodebird.tk', 'http://54.89.161.117'],
   credentials: true,
 }));
 app.use('/', express.static(path.join(__dirname, 'uploads')));

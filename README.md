@@ -1321,6 +1321,26 @@ axios.defaults.baseURL = "http://localhost:3065"; // 개발환경에서 주소
 axios.defaults.baseURL = "http://54.83.184.155"; // 백엔드 IP로 변경
 ```
 
+- back/app.js
+
+```js
+app.use(
+  cors({
+    origin: ["http://localhost:3060", "nodebird.tk", "http://54.89.161.117"], // 프론트 IP 추가
+    credentials: true,
+  })
+);
+```
+
+- 프론트는 소스가 바뀌면 빌드과정이 꼭 필요하다. 백엔드는 필요 없음
+
+```command
+npm run build
+npx pm2 start npm -- start
+```
+
+- pm2를 통해서 npm start
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
