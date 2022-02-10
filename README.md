@@ -1571,11 +1571,49 @@ npm init
 npm i aws-sdk sharp
 ```
 
-- sharp: 이미지 리사이징
-
-  - [sharp > API > Resizing images](https://sharp.pixelplumbing.com/api-resize)
+- sharp: 이미지 리사이징, [sharp > API > Resizing images](https://sharp.pixelplumbing.com/api-resize)
+- lambda/index.js 로직 작성
 
 - Lambda는 aws 서버 자체해서 돌려줘서 따로 인증 절차가 필요 없다.
+
+```ssh
+sudo su
+sudo npm i
+exit;
+```
+
+- lambda 루트에서 실습
+
+```ssh
+sudo apt install zip
+sudo zip -r aws-upload.zip ./*
+```
+
+```ssh
+sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+sudo unzip awscliv2.zip
+sudo ./aws/install
+aws configure
+```
+
+- AWS Access Key ID [None]: S3_ACCESS_KEY_ID
+- AWS Secret Access Key [None]: S3_SECRET_ACCESS_KEY
+- Default region name [None]: us-east-1
+- Default output format [None]: json
+
+- s3로 보내는 명령어
+
+```ssh
+aws s3 cp "aws-upload.zip" s3://react-nodebird-tk
+```
+
+- s3 업로드 됐는지 aws s3 콘솔에서 확인
+  <img src="aws_upload.png" />
+
+#### Lambda 함수 생성
+
+- AWS Lambda > 함수 생성 클릭
+  - 함수 이름 : image-resize, 생성하다가 403 에러 발생
 
 ## 참고 링크
 
@@ -1583,4 +1621,4 @@ npm i aws-sdk sharp
 - [강좌 저장소](https://github.com/ZeroCho/react-nodebird)
 - [aws](https://aws.amazon.com/ko)
 
-## 강좌 7-3 43:43
+## 강좌 7-3 01:03:40
