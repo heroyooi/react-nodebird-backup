@@ -793,6 +793,11 @@ import useSWR from "swr";
 ```
 
 - SSR 처리가 필요 없는 dispatch
+- SWR도 SSR이 된다.
+
+```js
+
+```
 
 ### 6-10. moment와 next 빌드하기
 
@@ -1304,6 +1309,17 @@ lsof -i tcp:80
 ```
 
 - 네트워크 및 보안 > 탄력적 IP > 체크 후 작업 클릭 > 탄력적 IP 주소 연결 해제 및 릴리스
+
+### 7-2. aws 배포하기
+
+#### 서버 환경에 맞춰서 주소 수정
+
+- front/sagas/index.js
+
+```js
+axios.defaults.baseURL = "http://localhost:3065"; // 개발환경에서 주소
+axios.defaults.baseURL = "http://54.83.184.155"; // 백엔드 IP로 변경
+```
 
 ## 참고 링크
 
