@@ -10,7 +10,6 @@ import {
   Global,
   Indicator,
 } from './styles';
-import { backUrl } from '../../config/config';
 
 const ImagesZoom = ({ images, onClose }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
