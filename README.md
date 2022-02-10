@@ -1245,39 +1245,6 @@ systemctl restart nginx
 - [freenom](https://www.freenom.com/en/index.html?lang=en)
 - freenom에서 무료 도메인 생성 및 dns 네임서버 aws 정보로 입력
 
-#### 탄력적 IP
-
-- 네트워크 및 보안 > 탄력적 IP > 탄력적 IP 주소 할당 (2개 생성)
-- ★ 탄력적 IP는 인스턴스랑 연결하면 무료인데, 인스턴스 지우고 탄력적 IP만 남아있으면 비용이 생긴다. 그래서 인스턴스를 지우고 탄력적 IP도 같이 지워줘야 한다.
-- 할당 IP 체크 후 작업 SELECT > 탄력적 IP 주소 연결 > 인스턴스 조회 후 선택해서 연결 클릭
-
-#### 탄력적 IP로 인해 주소가 바뀌었으니 다시 인스턴스 ssh 연결
-
-- front 인스턴스 ssh
-
-```command
-ssh -i "react-nodebird-aws.pem" ubuntu@ec2-3-226-66-187.compute-1.amazonaws.com
-```
-
-- back 인스턴스 ssh
-
-```command
-ssh -i "react-nodebird-aws.pem" ubuntu@ec2-50-16-186-189.compute-1.amazonaws.com
-```
-
-- [FRONT 서버](3.226.66.187)
-- [BACK 서버](50.16.186.189)
-
-#### Route 53 > 호스팅 영역 > nodebird.tk
-
-- 레코드 생성 > 레코드 (유형: A + 값: 3.226.66.187)
-- 레코드 생성 > 레코드 (이름: api + 레코드 유형 A + 값 50.16.186.189)
-
-- www.nodebird.tk 등록하고 싶으면 레코드 생성 > 레코드 (이름: www + 유형: CNAME)
-
-- DNS 등록 성공하면
-- [등록한 API 주소](http://api.nodebird.tk)
-
 #### 프론트 서버(리눅스) 구동
 
 - package.json 파일의 scripts start 부분 아래와 같이 수정
@@ -1388,7 +1355,9 @@ sudo npx pm2 reload all
 
 #### 도메인
 
-- 1년 단위로 빌리는 개념, gabia 1년 도메인 22,000원
+- 1년 단위로 빌리는 개념,
+  - Gabia는 1년 도메인 22,000원
+  - freenom은 1년간 공짜
 - 네임서버 설정: aws의 Route 53의 네임서버 정보를 사용하는 도메인 업체의 DNS 네임서버 설정에 등록
 
   - 예) aws의 Route 53 레코드 생성 화면
@@ -1396,6 +1365,39 @@ sudo npx pm2 reload all
 
   - 예) freenom의 DNS 네임서버 설정 화면
     <img src="freenom_name_server.png" />
+
+#### 탄력적 IP
+
+- 네트워크 및 보안 > 탄력적 IP > 탄력적 IP 주소 할당 (2개 생성)
+- ★ 탄력적 IP는 인스턴스랑 연결하면 무료인데, 인스턴스 지우고 탄력적 IP만 남아있으면 비용이 생긴다. 그래서 인스턴스를 지우고 탄력적 IP도 같이 지워줘야 한다.
+- 할당 IP 체크 후 작업 SELECT > 탄력적 IP 주소 연결 > 인스턴스 조회 후 선택해서 연결 클릭
+- 탄력적 IP를 인스턴스에 연결하면 퍼블릭 IPv4 주소가 고정된다.
+  - front: 54.89.161.117
+  - back: 54.83.184.155
+
+##### 탄력적 IP로 인해 주소가 바뀌었으니 다시 인스턴스 ssh 연결
+
+- front 인스턴스 ssh
+
+```command
+ssh -i "react-nodebird-aws.pem" ubuntu@ec2-34-237-177-46.compute-1.amazonaws.com
+```
+
+- back 인스턴스 ssh
+
+```command
+ssh -i "react-nodebird-aws.pem" ubuntu@ec2-35-175-156-100.compute-1.amazonaws.com
+```
+
+#### Route 53 > 호스팅 영역 > nodebird.tk
+
+- 레코드 생성 > 레코드 (유형: A + 값: 54.89.161.117)
+- 레코드 생성 > 레코드 (이름: api + 레코드 유형 A + 값 54.83.184.155)
+
+- www.nodebird.tk 등록하고 싶으면 레코드 생성 > 레코드 (이름: www + 유형: CNAME)
+
+- DNS 등록 성공하면
+- [등록한 API 주소](http://api.nodebird.tk)
 
 ## 참고 링크
 

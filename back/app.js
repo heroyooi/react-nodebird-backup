@@ -25,7 +25,7 @@ passportConfig();
 
 app.use(morgan('dev'));
 app.use(cors({
-  origin: ['http://localhost:3060', 'nodebird.tk', 'http://54.89.161.117'],
+  origin: ['http://localhost:3060', 'nodebird.tk'],
   credentials: true,
 }));
 app.use('/', express.static(path.join(__dirname, 'uploads')));
@@ -36,6 +36,11 @@ app.use(session({
   saveUninitialized: false,
   resave: false,
   secret: process.env.COOKIE_SECRET,
+  cookie: {
+    httpOnly: true,
+    secure: false,
+    domain: process.env.NODE_ENV === 'production' && '.nodebird.tk'
+  }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
