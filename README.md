@@ -1475,6 +1475,89 @@ sudo npx pm2 list
 sudo npx pm2 kill
 ```
 
+#### AWS S3 이미지 업로드
+
+- 강좌 7-3, 18:20 부터 시작
+- S3 > 버킷 만들기 클릭
+
+  - 버킷 이름: react-nodebird-tk (react-nodebird-s3, 강좌 버킷 이름)
+  - 모든 퍼블릭 액세스 차단 체크 해제
+    - 체크 해제해야 프론트 브라우저에서 S3 저장소에 접근할 수 있음
+
+- S3 > 버킷 > 권한 > 버킷 정책 편집 클릭
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AddPerm",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": ["s3:GetObject", "s3:PutObject"],
+      "Resource": "arn:aws:s3:::react-nodebird-tk/*"
+    }
+  ]
+}
+```
+
+- 위와 같이 수정하면 버킷 정책이 퍼블릭으로 바뀐다.
+- Resource의 react-nodebird-tk는 내 버킷명이어야함
+
+##### 엑세스 키 생성
+
+- 우측 상단 heroyooi > 보안 자격 증명 클릭
+- 액세스 키 > 새 액세스 키 만들기 클릭 > 키 파일 다운로드 버튼 클릭 (rootkey.csv 파일 다운로드 됨)
+  - csv 파일은 .env에 넣어두고, 남들에게 노출되면 안된다.
+- .env 파일에 S3 두가지 항목 추가
+
+```env
+COOKIE_SECRET=nodebirdsecret
+DB_PASSWORD=qwer1234
+S3_ACCESS_KEY_ID=AKIAZVBOFDPQKZCRY2M2
+S3_SECRET_ACCESS_KEY=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
+```
+
+##### 로컬 백엔드 서버 s3 설치
+
+```command
+npm i multer-s3 aws-sdk
+```
+
+- multer-s3 는 multer를 사용해서 s3로 한번에 올려주는 것
+- aws-sdk 는 s3 접근권한을 얻어서 s3에 연결할 수 있도록 해준다.
+
+```js (back/routes/post.js)
+const multerS3 = require("multer-s3");
+const AWS = require("aws-sdk");
+
+AWS.config.update({
+  accessKeyId: process.env.S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+  region: "us-east-1",
+});
+
+const upload = multer({
+  storage: multerS3({
+    s3: new AWS.S3(),
+    bucket: "react-nodebird-tk", // 버킷명
+    key(req, file, cb) {
+      cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`);
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
+});
+
+router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
+  res.json(req.files.map((v) => v.location));
+});
+```
+
+- 기존 multer에서 diskStorage 로 저장했던 방식에서 S3로 저장하도록 로직 부분 수정
+- region
+  - 미국 동부(버지니아 북부): us-east-1
+  - 아시아 태평양(서울): ap-northeast-2
+
 ## 참고 링크
 
 - [Next 공식문서](https://nextjs.org)
