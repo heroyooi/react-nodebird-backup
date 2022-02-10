@@ -1399,10 +1399,80 @@ ssh -i "react-nodebird-aws.pem" ubuntu@ec2-35-175-156-100.compute-1.amazonaws.co
 - DNS 등록 성공하면
 - [등록한 API 주소](http://api.nodebird.tk)
 
-- back 패키지 2개 더 설치
+#### 소스 변경 이후 AWS 리눅스 back 서버 재기동
+
+- back 패키지 2개 더 설치 및 app.js 로직 수정
 
 ```command
 npm i helmet hpp
+```
+
+```js
+if (process.env.NODE_ENV === "production") {
+  app.use(morgan("combined"));
+  app.use(hpp());
+  app.use(helmet({ contentSecurityPolicy: false }));
+  app.use(
+    cors({
+      origin: "http://nodebird.tk",
+      credentials: true,
+    })
+  );
+} else {
+  app.use(morgan("dev"));
+  app.use(
+    cors({
+      origin: true,
+      credentials: true,
+    })
+  );
+}
+
+app.use(
+  session({
+    saveUninitialized: false,
+    resave: false,
+    secret: process.env.COOKIE_SECRET,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      domain: process.env.NODE_ENV === "production" && ".nodebird.tk",
+    },
+  })
+);
+```
+
+- 위 소스 수정으로 인하여 프론트 & 백엔드 간 쿠키 공유 가능해짐
+  - 예) Network > Headers
+    <img src="resolve_cookie.png" />
+- back 소스 수정 이후 원격 저장소로 커밋 & 푸쉬
+- AWS 리눅스 back 서버 소스 반영 및 재기동
+
+```ssh
+sudo git pull
+sudo npx pm2 reload all
+```
+
+#### AWS 리눅스 back 서버 기동 관련 pm2 명령어
+
+- 만약 소스 머지가 안되면
+
+```ssh
+sudo git reset --hard
+sudo git pull
+sudo npx pm2 reload all
+```
+
+- 재기동 잘 되고 있는지 확인
+
+```ssh
+sudo npx pm2 list
+```
+
+- 서버 죽이기
+
+```ssh
+sudo npx pm2 kill
 ```
 
 ## 참고 링크
