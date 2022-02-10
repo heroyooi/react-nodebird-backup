@@ -40,6 +40,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get('/', (req, res) => {
+  res.send('hello express');
+})
+
 app.use('/posts', postsRouter);
 app.use('/post', postRouter);
 app.use('/user', userRouter);
@@ -48,10 +52,6 @@ app.use('/hashtag', hashtagRouter);
 // 에러처리 미들웨어
 // app.use((err, req, res, next) => {...});
 
-app.get('/', (req, res) => {
-  res.send('hello express');
-})
-
-app.listen(3065, () => {
+app.listen(80, () => {
   console.log('서버 실행 중 !!!');
 });
