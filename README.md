@@ -1518,7 +1518,7 @@ S3_ACCESS_KEY_ID=AKIAZVBOFDPQKZCRY2M2
 S3_SECRET_ACCESS_KEY=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
 ```
 
-##### 로컬 백엔드 서버 s3 설치
+##### 로컬 백엔드 서버 s3 설치 및 로직 수정
 
 ```command
 npm i multer-s3 aws-sdk
@@ -1557,6 +1557,7 @@ router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
 - region
   - 미국 동부(버지니아 북부): us-east-1
   - 아시아 태평양(서울): ap-northeast-2
+- 프론트에서도 backUrl이 들어갔던 이미지 경로 부분에서 s3 고유 경로로 바뀌기 때문에 backUrl을 제거 해줘야한다.
 
 ## 참고 링크
 
