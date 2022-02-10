@@ -1389,8 +1389,9 @@ sudo npx pm2 reload all
 #### 도메인
 
 - 1년 단위로 빌리는 개념, gabia 1년 도메인 22,000원
-- 네임서버 설정 => aws > Route 53
+- 네임서버 설정: aws의 Route 53의 네임서버 정보를 사용하는 도메인 업체의 DNS 네임서버 설정에 등록
   <img src="aws_route53.png" />
+  <img src="freenom_name_server.png" />
 
 ## 참고 링크
 
